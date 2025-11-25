@@ -1,19 +1,19 @@
 # ComfyUI_RN_Transtor
 
-**RN翻译器 - 基于大模型API的专业翻译插件**
+**RN 翻译器 - 基于大模型 API 的专业翻译插件**
 
 ## 功能特点
 
 - 🌐 **多语言翻译**：支持自动检测源语言，翻译到目标语言
 - 🎯 **多种翻译风格**：标准、正式、口语化、学术、商务风格
-- 🔧 **多API支持**：支持OpenAI、DeepSeek、通义千问、豆包等兼容OpenAI接口的大模型
-- 💡 **智能提示**：内置专业翻译助手提示词
-- ⚙️ **灵活配置**：可自定义温度参数、系统提示词等
+- 🔧 **多 API 支持**：支持 OpenAI、DeepSeek、通义千问、豆包等兼容 OpenAI 接口的大模型
+- 💡 **智能提示**：内置专业翻译助手提示词（不在界面展示）
+- ⚙️ **灵活配置**：可自定义温度参数，支持 API/模型选择
 
 ## 支持的API服务商
 
-由于大多数LLM API都兼容OpenAI的接口规范，本插件可以接入任何兼容OpenAI接口的LLM模型：
-- **OpenAI**: GPT-3.5-Turbo, GPT-4 等
+由于大多数 LLM API 都兼容 OpenAI 的接口规范，本插件可以接入任何兼容 OpenAI 接口的 LLM 模型：
+- **OpenAI**: GPT-4、GPT-4o、GPT-4o-mini 等
 - **DeepSeek**: DeepSeek-Chat, DeepSeek-Coder 等
 - **通义千问**: Qwen 系列模型
 - **豆包**: 豆包系列模型
@@ -24,17 +24,17 @@
 
 ### 基本配置
 
-1. **API Base URL**: 输入API服务商提供的基础URL
+1. **apiBaseUrl**: 输入 API 服务商提供的基础 URL
    - OpenAI: `https://api.openai.com/v1`
    - DeepSeek: `https://api.deepseek.com/v1`
    - 其他服务商请查看对应文档
 
-2. **API Key**: 输入您的API密钥
+2. **apiKey**: 输入您的 API 密钥
 
-3. **模型名称**: 输入要使用的具体模型名称
-   - OpenAI: `gpt-3.5-turbo`, `gpt-4`
-   - DeepSeek: `deepseek-chat`
-   - 其他模型请查看对应文档
+3. **model**: 输入要使用的具体模型名称
+  - OpenAI: `gpt-4o-mini`（默认回退）、`gpt-4o` 等
+  - DeepSeek: `deepseek-chat`
+  - 其他模型请查看对应文档
 
 ### 翻译设置
 
@@ -75,12 +75,11 @@
    - 中等值（0.4-0.7）: 平衡的翻译
    - 较高值（0.8-1.5）: 更有创造性的翻译
 
-9. **系统提示词** (可选): 自定义系统提示词，默认为专业翻译助手
+（系统提示词已内置为专业翻译助手，不在界面中展示）
 
 ## 输出说明
 
 - **翻译结果**: 翻译后的文本内容
-- **原始文本**: 输入的原始文本（用于对比参考）
 
 ## 使用示例
 
@@ -113,6 +112,13 @@
 4. **费用控制**: 注意API调用费用，建议先进行小量测试
 5. **翻译质量**: 不同模型的翻译质量可能有差异，建议根据需求选择合适的模型
 
+## 环境变量回退
+
+当界面中的 `apiBaseUrl`、`apiKey`、`model` 留空时，插件会按以下顺序回退到环境变量：
+- Base URL: `LLM_API_BASEURL` → `OPENAI_BASE_URL` → `OPENAI_API_BASE_URL` → `DEEPSEEK_API_BASE_URL`
+- API Key: `LLM_API_KEY` → `OPENAI_API_KEY` → `DEEPSEEK_API_KEY`
+- Model: `LLM_MODEL` → `OPENAI_MODEL` → `DEEPSEEK_MODEL`
+
 ## 故障排除
 
 ### 常见错误及解决方案
@@ -124,22 +130,24 @@
    - 解决方案: 在源文本字段中输入要翻译的内容
 
 3. **"翻译错误：API连接失败"**
-   - 解决方案: 检查网络连接和API Base URL是否正确
+  - 解决方案: 检查网络连接和 `apiBaseUrl` 是否正确
 
 4. **"错误：API返回空结果"**
    - 解决方案: 检查模型名称是否正确，API密钥是否有效
 
 5. **翻译质量不佳**
-   - 解决方案: 尝试调整温度参数，或选择更适合的翻译风格
+  - 解决方案: 尝试调整温度参数，或选择更适合的翻译风格
+
+## 示例工作流
+
+仓库内已提供 `翻译示例工作流.json`，使用 `RN 翻译器`（单一 Options 形态），并包含 `apiBaseUrl/apiKey/model` 三个配置项示例。可在 ComfyUI 中直接导入运行。
 
 ## 更新日志
 
-### v1.0.0 (2025-11-21)
-- ✨ 初始版本发布
-- 🌐 支持多语言翻译
-- 🎯 支持多种翻译风格
-- 🔧 兼容OpenAI接口的大模型
-- 💡 内置专业翻译助手提示词
+### v1.1.0 (2025-11-25)
+- 合并为单一 Options 形态节点，显示名称为“RN 翻译器”
+- 重命名输入为 `apiBaseUrl/apiKey/model`，支持环境变量回退
+- 更新示例工作流以匹配新版节点
 
 ## 开源协议
 
